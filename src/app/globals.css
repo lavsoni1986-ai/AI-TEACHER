@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+  --background: #04060c;
+  --foreground: #f8fafc;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-outfit), var(--font-noto-hindi), sans-serif;
+  
+  --color-cyber-cyan: #00f2fe;
+  --color-cyber-blue: #4facfe;
+  --color-bharat-orange: #ff8008;
+  --color-bharat-amber: #ffc837;
+  --color-dark-bg: #04060c;
+  --color-dark-card: #0b1120;
+  --color-dark-border: #1e293b;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Custom glow utility effects */
+.glow-cyan {
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+  border-color: rgba(0, 242, 254, 0.4);
+}
+
+.glow-orange {
+  box-shadow: 0 0 15px rgba(255, 128, 8, 0.25);
+  border-color: rgba(255, 128, 8, 0.4);
+}
+
+.glow-cyan-hover:hover {
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+  border-color: rgba(0, 242, 254, 0.8);
+}
+
+.glow-orange-hover:hover {
+  box-shadow: 0 0 25px rgba(255, 128, 8, 0.5);
+  border-color: rgba(255, 128, 8, 0.8);
+}
+
+.glow-text-cyan {
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+.glow-text-orange {
+  text-shadow: 0 0 10px rgba(255, 128, 8, 0.5);
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+  }
+  50% {
+    transform: scale(1.01);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.55);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+@keyframes gridMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+.cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  animation: gridMove 15s linear infinite;
+}
