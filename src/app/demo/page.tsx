@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ROADMAP_DATA, MonthData } from "@/context/DemoContext";
+import { ROADMAP_DATA, TimelineItem } from "@/context/DemoContext";
 import HexagonTreeLogo from "@/components/ui/HexagonTreeLogo";
 import { getFallbackMessage } from "@/lib/fallbackTeacher";
 import RegistrationCard from "@/components/ui/RegistrationCard";
@@ -31,7 +31,7 @@ export default function DemoPage() {
   const [demoScenario, setDemoScenario] = useState<"day1" | "day7">("day1");
   
   // Roadmap states
-  const [visibleMonths, setVisibleMonths] = useState<MonthData[]>([]);
+  const [visibleMonths, setVisibleMonths] = useState<TimelineItem[]>([]);
   const [isDoneGenerating, setIsDoneGenerating] = useState(false);
 
   // Streaming Chat states
@@ -195,29 +195,19 @@ export default function DemoPage() {
     const finalName = overrideName || name;
     const finalClass = overrideClass || classCat;
     
-    // Simulate live AI roadmap generation month-by-month on the right panel
     const roadmap = ROADMAP_DATA[key];
     if (roadmap) {
-      // Month 1
-      setTimeout(() => {
-        setVisibleMonths([roadmap.months[0]]);
-      }, 700);
-      // Month 2
-      setTimeout(() => {
-        setVisibleMonths((prev) => [...prev, roadmap.months[1]]);
-      }, 1400);
-      // Month 3
-      setTimeout(() => {
-        setVisibleMonths((prev) => [...prev, roadmap.months[2]]);
-      }, 2100);
-      // Month 4
-      setTimeout(() => {
-        setVisibleMonths((prev) => [...prev, roadmap.months[3]]);
-        setIsDoneGenerating(true);
-        setStep("result");
-        // Trigger live Gemini Greeting in Chat
-        triggerLiveGeminiGreeting(finalName, finalClass, key);
-      }, 2800);
+      roadmap.timeline.forEach((item, index) => {
+        setTimeout(() => {
+          setVisibleMonths((prev) => [...prev, item]);
+          
+          if (index === roadmap.timeline.length - 1) {
+            setIsDoneGenerating(true);
+            setStep("result");
+            triggerLiveGeminiGreeting(finalName, finalClass, key);
+          }
+        }, 700 * (index + 1));
+      });
     }
   };
 
@@ -230,7 +220,7 @@ export default function DemoPage() {
     
     const roadmap = ROADMAP_DATA["Game Developer"];
     if (roadmap) {
-      setVisibleMonths(roadmap.months);
+      setVisibleMonths(roadmap.timeline);
       setIsDoneGenerating(true);
     }
     
@@ -643,8 +633,9 @@ export default function DemoPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                {Object.keys(ROADMAP_DATA).map((key) => {
+                {["Smart Study Assistant", "AI Expert", "Computer Expert", "Website Developer", "App Developer", "Game Developer"].map((key) => {
                   const data = ROADMAP_DATA[key];
+                  if (!data) return null;
                   const isStudyAssistant = key === "Smart Study Assistant";
                   return (
                     <button
@@ -683,6 +674,33 @@ export default function DemoPage() {
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Special Masterclass Section */}
+              <div className="mt-8 pt-6 border-t border-slate-800/60">
+                <div className="text-center space-y-1 mb-4">
+                  <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Special AI Masterclass</span>
+                  <h3 className="text-sm font-bold text-slate-300">भविष्य का प्रीमियम कोर्स</h3>
+                </div>
+                
+                {ROADMAP_DATA["AI Masterclass"] && (
+                  <button
+                    onClick={() => handleCareerSelect("AI Masterclass")}
+                    className="w-full p-5 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-950/20 to-slate-900/40 hover:border-amber-400 hover:from-amber-900/30 hover:to-slate-900/60 transition-all text-left flex flex-col md:flex-row items-center gap-4 cursor-pointer group shadow-[0_0_15px_rgba(245,158,11,0.1)] hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                  >
+                    <span className="text-5xl md:text-6xl shrink-0 group-hover:scale-110 transition-transform drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]">
+                      {ROADMAP_DATA["AI Masterclass"].emoji}
+                    </span>
+                    <div className="flex flex-col text-center md:text-left items-center md:items-start w-full">
+                      <span className="font-black text-white text-lg md:text-xl group-hover:text-amber-400 transition-colors">
+                        {ROADMAP_DATA["AI Masterclass"].title}
+                      </span>
+                      <span className="text-xs text-amber-200/70 font-semibold mt-1">
+                        7-Day AI Architecture Workshop · For Curious Minds
+                      </span>
+                    </div>
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -843,7 +861,7 @@ export default function DemoPage() {
 
               {/* Dynamic 4-Month Roadmaps list */}
               <div className="space-y-3">
-                {ROADMAP_DATA[career]?.months.map((m, idx) => (
+                {ROADMAP_DATA[career]?.timeline.map((m, idx) => (
                   <div
                     key={idx}
                     className="p-4 rounded-2xl border border-slate-900 bg-slate-950/50 flex gap-4 hover:border-[#00f2fe] transition-colors"

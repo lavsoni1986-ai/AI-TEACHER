@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-export interface MonthData {
+export interface TimelineItem {
   num: string;
   title: string;
   subtopic: string;
@@ -12,7 +12,10 @@ export interface MonthData {
 export interface RoadmapDetails {
   title: string;
   emoji: string;
-  months: MonthData[];
+  roadmapType: "MONTHLY" | "DAILY";
+  duration: number;
+  durationLabel: string;
+  timeline: TimelineItem[];
   recommendedCourse: string;
   checklist: string[];
 }
@@ -21,7 +24,10 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   "Smart Study Assistant": {
     title: "Smart Study Assistant (एआई पढ़ाई साथी)",
     emoji: "📚",
-    months: [
+    roadmapType: "MONTHLY",
+    duration: 4,
+    durationLabel: "महीने",
+    timeline: [
       { num: "Month 1", title: "Science Visual Learning (विज्ञान विज़ुअलाइज़र)", subtopic: "Visual Concepts", desc: "3D चित्रों और आसान चार्ट की मदद से विज्ञान को गहराई से समझना।" },
       { num: "Month 2", title: "Math Problem Solving (गणित समाधान)", subtopic: "Problem Solving", desc: "गणित के कठिन सवालों को हर कदम पर आसानी से हल करना सीखना।" },
       { num: "Month 3", title: "English & Communication (अंग्रेजी शिक्षा)", subtopic: "Grammar Mastery", desc: "अंग्रेजी व्याकरण को सुधारना और बातचीत करना सीखना।" },
@@ -38,7 +44,10 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   "AI Expert": {
     title: "AI Expert (एआई एक्सपर्ट)",
     emoji: "🤖",
-    months: [
+    roadmapType: "MONTHLY",
+    duration: 4,
+    durationLabel: "महीने",
+    timeline: [
       { num: "Month 1", title: "Scratch AI Blocks (स्क्रैच विजुअल कोडिंग)", subtopic: "Visual Coding", desc: "बिना कोडिंग लिखे आसान ब्लॉक्स की मदद से कंप्यूटर लॉजिक बनाना।" },
       { num: "Month 2", title: "Python Coding & Logic (पायथन प्रोग्रामिंग और लॉजिक)", subtopic: "Text Coding", desc: "पायथन भाषा में कोडिंग लिखकर कंप्यूटर प्रोग्राम बनाना सीखना।" },
       { num: "Month 3", title: "Simple Data Models (डेटा मॉडल्स और ट्रेनिंग)", subtopic: "Machine Learning", desc: "फोटो और शब्दों को पहचानने वाला एआई मॉडल ट्रेन करना।" },
@@ -55,7 +64,10 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   "Website Developer": {
     title: "Website Developer (वेबसाइट बनाने वाला)",
     emoji: "🌐",
-    months: [
+    roadmapType: "MONTHLY",
+    duration: 4,
+    durationLabel: "महीने",
+    timeline: [
       { num: "Month 1", title: "HTML Structures (वेबसाइट का ढांचा)", subtopic: "Web Blueprint", desc: "हेडिंग, फोटो और बटन लगाकर वेबसाइट का पहला पन्ना बनाना।" },
       { num: "Month 2", title: "CSS Styles & design (वेबसाइट डिजाइन और स्टाइल)", subtopic: "Neon CSS", desc: "वेबसाइट को रंगीन और सुंदर डिजाइन देना सीखना।" },
       { num: "Month 3", title: "JavaScript Interaction (वेबसाइट में बटन और एक्शन)", subtopic: "Dynamic DOM", desc: "वेबसाइट में बटन दबाने पर काम करने वाले कैलकुलेटर जैसे फीचर्स जोड़ना।" },
@@ -72,7 +84,10 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   "Game Developer": {
     title: "Game Developer (गेम बनाने वाला)",
     emoji: "🎮",
-    months: [
+    roadmapType: "MONTHLY",
+    duration: 4,
+    durationLabel: "महीने",
+    timeline: [
       { num: "Month 1", title: "Scratch Games (स्क्रैच गेम मेकिंग)", subtopic: "Game Logic", desc: "आसान ब्लॉक जोड़कर चलने-दौड़ने वाले गेम बनाना सीखना।" },
       { num: "Month 2", title: "HTML Games (वेब ब्राउज़र गेम्स)", subtopic: "UI Elements", desc: "कंप्यूटर स्क्रीन पर दिखने वाले कंट्रोल और बटन बनाना।" },
       { num: "Month 3", title: "JavaScript Basics (जावास्क्रिप्ट गेम लॉजिक)", subtopic: "Physics Engine", desc: "गेम के किरदारों में कूदने, दौड़ने और टकराने के नियम डालना।" },
@@ -89,7 +104,10 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   "App Developer": {
     title: "App Developer (मोबाइल ऐप बनाने वाला)",
     emoji: "📱",
-    months: [
+    roadmapType: "MONTHLY",
+    duration: 4,
+    durationLabel: "महीने",
+    timeline: [
       { num: "Month 1", title: "Figma App UI (मोबाइल ऐप डिजाइन)", subtopic: "App Design", desc: "मोबाइल स्क्रीन पर ऐप कैसा दिखेगा, उसका सुंदर डिजाइन बनाना।" },
       { num: "Month 2", title: "App Building Blocks (ऐप लॉजिक और स्क्रीन्स)", subtopic: "Visual Layouts", desc: "बटन दबाने पर दूसरी स्क्रीन खुलने का लॉजिक जोड़ना।" },
       { num: "Month 3", title: "Database & Local Settings (डेटाबेस और लोकल सेटिंग्स)", subtopic: "App Storage", desc: "ऐप में यूजर का नाम, फोटो और सेटिंग्स सुरक्षित सेव करना।" },
@@ -106,7 +124,10 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   "Computer Expert": {
     title: "Computer Expert (कंप्यूटर एक्सपर्ट)",
     emoji: "💻",
-    months: [
+    roadmapType: "MONTHLY",
+    duration: 4,
+    durationLabel: "महीने",
+    timeline: [
       { num: "Month 1", title: "Computer Hardware & OS (कंप्यूटर के पार्ट्स और सिस्टम)", subtopic: "Core Hardware", desc: "कंप्यूटर के पुर्जों जैसे रैम, प्रोसेसर और विंडोज सेटिंग को समझना।" },
       { num: "Month 2", title: "Internet & Cloud Tools (इंटरनेट और ऑनलाइन कार्य)", subtopic: "Office Utilities", desc: "इंटरनेट का सही इस्तेमाल, ईमेल भेजना और ऑनलाइन फॉर्म भरना सीखना।" },
       { num: "Month 3", title: "Office Productivity (MS Office और डिजिटल कार्य)", subtopic: "Shell Scripts", desc: "वर्ड, एक्सेल और कमांड लाइन से कंप्यूटर पर तेजी से काम करना।" },
@@ -123,7 +144,10 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   "Digital Creator": {
     title: "Digital Creator (डिजिटल क्रिएटर)",
     emoji: "🎨",
-    months: [
+    roadmapType: "MONTHLY",
+    duration: 4,
+    durationLabel: "महीने",
+    timeline: [
       { num: "Month 1", title: "Design Fundamentals (डिजाइन के मूल सिद्धांत)", subtopic: "Aesthetics", desc: "सुंदर रंगों और फोंट्स को मिलाकर डिजाइन बनाना सीखना।" },
       { num: "Month 2", title: "Canva & Raster Tools (पोस्टर और बैनर मेकिंग)", subtopic: "Layering Graphics", desc: "स्कूल के बैनर, पोस्टर और सोशल मीडिया के लिए फोटो डिजाइन करना।" },
       { num: "Month 3", title: "Vector Art & Logos (लोगो डिजाइन और स्केचिंग)", subtopic: "Scalable Icons", desc: "दुकान या कंपनी के लिए लोगो और कंप्यूटर आर्ट बनाना।" },
@@ -135,6 +159,32 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
       "Flyer templates dimensions config karna",
       "SVG path coordinates define karna",
       "Prompt designs fine-tune setup karna"
+    ]
+  },
+  "AI Masterclass": {
+    title: "🔥 The Invisible Power House of AI",
+    emoji: "⚡",
+    roadmapType: "DAILY",
+    duration: 7,
+    durationLabel: "दिन",
+    timeline: [
+      { num: "Day 1", title: "एआई का जन्म और असली परिभाषा (The Silicon Genesis)", subtopic: "The Tokenizer Magic", desc: "Sovereign AI का कॉन्सेप्ट। लाइव देखना कि कैसे कोई भी वाक्य एआई के लिए शब्द नहीं, बल्कि नंबर्स और कोड्स में टूटता है।" },
+      { num: "Day 2", title: "द सिलिकॉन बीस्ट (हार्डवेयर और ट्रांजिस्टर की भौतिकी)", subtopic: "The Matrix Multiplication Race", desc: "CPU बनाम GPU। Tensor Core एक नैनोसेकंड में लाखों मैट्रिक्स गुणा कैसे करता है।" },
+      { num: "Day 3", title: "द इनविजिबल ग्रिड (बिजली, पानी और डेटा सेंटर्स)", subtopic: "Live Carbon & Power Calculator", desc: "एक सिंगल प्रॉम्प्ट की भौतिक कीमत। डेटा सेंटर्स की बिजली खपत और Liquid Cooling।" },
+      { num: "Day 4", title: "इंटरनेट के कचरे से ज्ञान का जन्म (डेटा फिल्टरेशन)", subtopic: "The Clean vs Dirty Data Demo", desc: "Deduplication और टॉक्सिसिटी। रॉ इंटरनेट स्क्रैप और रिफाइंड डेटा में अंतर।" },
+      { num: "Day 5", title: "शब्द जब स्पेस में तैरते हैं (वेक्टर्स और एम्बेडिंग्स)", subtopic: "The Vector Math Magic", desc: "मानवीय भाषा को शुद्ध गणितीय वेक्टर्स में बदलना। राजा - पुरुष + महिला = रानी।" },
+      { num: "Day 6", title: "अटेंशन मैकेनिक्स (एआई कैसे ध्यान लगाता है?)", subtopic: "The Attention Map Visualization", desc: "Transformer Architecture और 'Self-Attention'। एआई किन शब्दों पर सबसे ज्यादा 'Attention Weight' देता है।" },
+      { num: "Day 7", title: "द मास्टरमाइंड (MoE आर्किटेक्चर)", subtopic: "The Router Simulation", desc: "Mixture of Experts। Router/Gating Network का रोल। अलग-अलग Expert Layers कैसे एक्टिवेट होती हैं।" }
+    ],
+    recommendedCourse: "7-Day AI Masterclass - BharatOS Academy",
+    checklist: [
+      "Tokenizer conversion visualization run",
+      "GPU Tensor Core matrix race demonstrate",
+      "Data Center carbon power calculation check",
+      "Deduplication minhash dirty data filter",
+      "High-dimensional vector embedding math test",
+      "Self-Attention weight mapping observe",
+      "MoE Router gating network simulate"
     ]
   }
 };

@@ -18,7 +18,7 @@ export default function CareerPage() {
     title: data.title,
     emoji: data.emoji,
     course: data.recommendedCourse,
-    firstMonth: data.months[0]?.title || ""
+    firstMonth: data.timeline[0]?.title || ""
   }));
 
   return (

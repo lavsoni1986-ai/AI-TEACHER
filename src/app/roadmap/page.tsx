@@ -506,7 +506,7 @@ export default function RoadmapPage() {
           <div className="bg-dark-card/50 backdrop-blur-xl border border-slate-800/80 p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
             <div className="space-y-2 mb-6">
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <span>🗺️</span> {roadmap.emoji} आपका 4-महीने का सीखने का मार्ग
+                <span>🗺️</span> {roadmap.emoji} आपका {roadmap.duration}-{roadmap.durationLabel} का सीखने का मार्ग
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 यह रोडमैप आपकी रुचियों और लक्ष्यों के हिसाब से डिज़ाइन किया गया है। हर महीने के टॉपिक्स को कवर करके आप अपने लक्ष्य को हासिल कर सकते हैं।
@@ -515,7 +515,7 @@ export default function RoadmapPage() {
 
             {/* Timeline */}
             <div className="relative border-l border-[#00f2fe]/20 ml-4 pl-6 space-y-8">
-              {roadmap.months.map((item, idx) => (
+              {roadmap.timeline.map((item, idx) => (
                 <div key={idx} className="relative">
                   {/* Glowing Node */}
                   <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full border-2 border-[#00f2fe] bg-dark-bg glow-cyan" />
