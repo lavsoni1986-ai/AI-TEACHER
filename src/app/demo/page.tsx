@@ -9,6 +9,9 @@ import QRCodeSection from "@/components/ui/QRCodeSection";
 import WorkshopInfoCard from "@/components/ui/WorkshopInfoCard";
 import ShahdolTrustBanner from "@/components/ui/ShahdolTrustBanner";
 import ParentFAQCard from "@/components/ui/ParentFAQCard";
+import FounderVisionCard from "@/components/ui/FounderVisionCard";
+import WhatsAppStudyCircle from "@/components/ui/WhatsAppStudyCircle";
+import BringAFriendBanner from "@/components/ui/BringAFriendBanner";
 
 const workshopMode = process.env.NEXT_PUBLIC_WORKSHOP_MODE === "true";
 
@@ -928,6 +931,9 @@ export default function DemoPage() {
               <WorkshopInfoCard />
               <QRCodeSection />
               <ParentFAQCard />
+              <FounderVisionCard />
+              <WhatsAppStudyCircle />
+              {workshopMode && <BringAFriendBanner />}
 
             </div>
           )}
