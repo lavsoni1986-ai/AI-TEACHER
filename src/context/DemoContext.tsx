@@ -30,7 +30,7 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
     timeline: [
       { num: "Month 1", title: "Science Visual Learning (विज्ञान विज़ुअलाइज़र)", subtopic: "Visual Concepts", desc: "3D चित्रों और आसान चार्ट की मदद से विज्ञान को गहराई से समझना।" },
       { num: "Month 2", title: "Math Problem Solving (गणित समाधान)", subtopic: "Problem Solving", desc: "गणित के कठिन सवालों को हर कदम पर आसानी से हल करना सीखना।" },
-      { num: "Month 3", title: "English & Communication (अंग्रेजी शिक्षा)", subtopic: "Grammar Mastery", desc: "अंग्रेजी व्याकरण को सुधारना और बातचीत करना सीखना।" },
+      { num: "Month 3", title: "English & Communication (अंग्रेजी शिक्षा)", subtopic: "Grammar Practice", desc: "अंग्रेजी व्याकरण को सुधारना और बातचीत करना सीखना।" },
       { num: "Month 4", title: "Board Exam Preparation (परीक्षा की तैयारी)", subtopic: "Mock & Revision", desc: "परीक्षा के लिए जरूरी अभ्यास टेस्ट देना और महत्वपूर्ण नोट्स बनाना।" }
     ],
     recommendedCourse: "AI + School Studies + Future Skills - BharatOS Academy",

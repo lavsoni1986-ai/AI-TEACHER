@@ -7,6 +7,7 @@ import ShahdolTrustBanner from "@/components/ui/ShahdolTrustBanner";
 import BringAFriendBanner from "@/components/ui/BringAFriendBanner";
 import WhatsAppStudyCircle from "@/components/ui/WhatsAppStudyCircle";
 import FounderVisionCard from "@/components/ui/FounderVisionCard";
+import SkillPositioningBanner from "@/components/ui/SkillPositioningBanner";
 
 const workshopMode = process.env.NEXT_PUBLIC_WORKSHOP_MODE === "true";
 
@@ -130,6 +131,9 @@ export default function WelcomePage() {
 
         {/* Founder Vision */}
         <FounderVisionCard />
+
+        {/* Skill Positioning */}
+        <SkillPositioningBanner />
 
         {/* WhatsApp Study Circle */}
         <WhatsAppStudyCircle />

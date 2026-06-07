@@ -4,20 +4,24 @@ interface ParentFAQCardProps {
 
 const faqs = [
   {
-    q: "AI se Maths kaise sudhrega?",
-    a: "AI Teacher हर सवाल को step-by-step हल करता है और बार-बार समझाता है।"
+    q: "AI mere bachche ki padhai me kaise madad karega?",
+    a: "AI Teacher हर सवाल को आसान भाषा में step-by-step हल करता है और 24x7 डाउट क्लियर करता है।"
   },
   {
-    q: "Board Exam ki taiyari me kaise madad milegi?",
-    a: "NCERT के सभी अध्याय, mock tests और revision notes AI से मिलते हैं।"
+    q: "Maths aur Science me kaise support karega?",
+    a: "कठिन कॉन्सेप्ट्स को आसान उदाहरणों और लॉजिक के साथ समझाकर पढ़ाई को रोचक बनाता है।"
   },
   {
-    q: "Roz kitna samay dena hoga?",
-    a: "केवल 30 मिनट रोज — Mobile या Computer पर, घर से।"
+    q: "Kya Coding sabko seekhna zaruri hai?",
+    a: "बिल्कुल नहीं! हमारा 'Smart Study Assistant' सिर्फ School की पढ़ाई और बोर्ड परीक्षा के लिए है।"
   },
   {
-    q: "Kya Coding zaruri hai?",
-    a: "बिल्कुल नहीं! Smart Study Assistant सिर्फ School पढ़ाई के लिए है।"
+    q: "Kya AI teacher school teacher ko replace karega?",
+    a: "नहीं, AI टीचर एक 'Study Assistant' है जो स्कूल और टीचर्स की पढ़ाई को घर पर और मजबूत बनाता है।"
+  },
+  {
+    q: "Degree aur skill me kya difference hai?",
+    a: "डिग्री आपको कॉलेज से मिलती है, लेकिन प्रैक्टिकल 'Skills' और 'Confidence' से भविष्य बनता है।"
   }
 ];
 
