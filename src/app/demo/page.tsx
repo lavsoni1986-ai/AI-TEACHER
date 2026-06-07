@@ -4,6 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import { ROADMAP_DATA, MonthData } from "@/context/DemoContext";
 import HexagonTreeLogo from "@/components/ui/HexagonTreeLogo";
 import { getFallbackMessage } from "@/lib/fallbackTeacher";
+import RegistrationCard from "@/components/ui/RegistrationCard";
+import QRCodeSection from "@/components/ui/QRCodeSection";
+import WorkshopInfoCard from "@/components/ui/WorkshopInfoCard";
+import ShahdolTrustBanner from "@/components/ui/ShahdolTrustBanner";
+import ParentFAQCard from "@/components/ui/ParentFAQCard";
+
+const workshopMode = process.env.NEXT_PUBLIC_WORKSHOP_MODE === "true";
 
 interface ChatMessage {
   sender: "student" | "teacher";
@@ -914,6 +921,13 @@ export default function DemoPage() {
                   </div>
                 </div>
               </div>
+
+              {/* New Components: Registration, Trust, Workshop, QR, FAQ */}
+              <RegistrationCard />
+              <ShahdolTrustBanner />
+              <WorkshopInfoCard />
+              <QRCodeSection />
+              <ParentFAQCard />
 
             </div>
           )}

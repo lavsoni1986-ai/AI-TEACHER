@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { useDemo } from "@/context/DemoContext";
 import HexagonTreeLogo from "@/components/ui/HexagonTreeLogo";
 import { getFallbackMessage } from "@/lib/fallbackTeacher";
+import RegistrationCard from "@/components/ui/RegistrationCard";
+import QRCodeSection from "@/components/ui/QRCodeSection";
+import WorkshopInfoCard from "@/components/ui/WorkshopInfoCard";
+import ShahdolTrustBanner from "@/components/ui/ShahdolTrustBanner";
+import ParentFAQCard from "@/components/ui/ParentFAQCard";
 
 interface Message {
   sender: "student" | "teacher";
@@ -651,6 +656,13 @@ export default function RoadmapPage() {
               </div>
             </div>
           </div>
+
+          {/* New Components: Registration, Trust, Workshop, QR, FAQ */}
+          <RegistrationCard />
+          <ShahdolTrustBanner />
+          <WorkshopInfoCard />
+          <QRCodeSection />
+          <ParentFAQCard />
 
         </div>
 

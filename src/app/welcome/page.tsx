@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useDemo } from "@/context/DemoContext";
 import HexagonTreeLogo from "@/components/ui/HexagonTreeLogo";
+import ShahdolTrustBanner from "@/components/ui/ShahdolTrustBanner";
 
 export default function WelcomePage() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function WelcomePage() {
           </p>
           <p className="text-slate-300 text-sm md:text-base leading-relaxed">
             मैं <strong>BharatOS AI Teacher</strong> हूँ।<br />
-            मैं आपके सपनों, रुचियों और लक्ष्यों के आधार पर आपका व्यक्तिगत सीखने का मार्ग (Roadmap) तैयार करूँगा।
+            आपके सपनों, रुचियों और लक्ष्यों के आधार पर आपका व्यक्तिगत सीखने का मार्ग तैयार है।
           </p>
         </div>
 
@@ -92,8 +93,28 @@ export default function WelcomePage() {
 
       </div>
 
+      {/* Workshop Teaser Strip */}
+      {process.env.NEXT_PUBLIC_WORKSHOP_MODE === "true" && (
+        <div className="w-full max-w-3xl mt-4 p-4 rounded-2xl bg-orange-950/20 border border-orange-500/30 text-center space-y-1">
+          <div className="text-xs font-black text-orange-400 uppercase tracking-widest">🔥 Mega AI Workshop</div>
+          <div className="text-sm font-black text-white">14 June 2026 (Sunday) · Shahdol, M.P.</div>
+          <div className="text-xs text-slate-400 font-semibold">Classes 8–12 Students · Parents Welcome · ₹200</div>
+          <a
+            href="https://wa.me/919753239303"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-1 text-xs font-black text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            📱 Register via WhatsApp → 9753239303
+          </a>
+        </div>
+      )}
+
+      {/* Shahdol Trust Banner */}
+      <ShahdolTrustBanner className="w-full max-w-3xl mt-4" />
+
       {/* Footer Branding */}
-      <div className="mt-8 text-center text-[10px] text-slate-600 tracking-wider">
+      <div className="mt-6 text-center text-[10px] text-slate-600 tracking-wider">
         BHARATOS ACADEMY, SHAHDOL, INDIA | jahan teacher khud ai hai
       </div>
     </main>

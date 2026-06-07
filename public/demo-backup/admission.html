@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<title>Admission Card — Offline Backup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #05070f; color: #f1f5f9; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+  .card { max-width: 520px; width: 100%; background: #0d1117; border: 1px solid #166534; border-radius: 24px; padding: 2.5rem 2rem; }
+  .badge { display: inline-block; font-size: 9px; font-weight: 900; color: #4ade80; background: #052e16; border: 1px solid #166534; border-radius: 6px; padding: 3px 10px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+  h1 { font-size: 1.75rem; font-weight: 900; color: #fff; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 0.75rem; color: #00f2fe; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+  .audience { display: flex; gap: 1rem; margin: 0.75rem 0; flex-wrap: wrap; }
+  .tag { font-size: 9px; font-weight: 900; padding: 2px 10px; border-radius: 999px; border: 1px solid; }
+  .tag.green { color: #4ade80; border-color: #166534; background: #052e16; }
+  .tag.amber { color: #fbbf24; border-color: #92400e; background: #1a0e00; }
+  .workshop-banner { background: #1a0a00; border: 1px solid #92400e; border-radius: 12px; padding: 1rem; text-align: center; margin: 1rem 0; }
+  .workshop-banner .wt { font-size: 0.7rem; font-weight: 900; color: #fb923c; text-transform: uppercase; letter-spacing: 0.15em; }
+  .workshop-banner .wd { font-size: 1.1rem; font-weight: 900; color: #fff; margin: 0.25rem 0; }
+  .workshop-banner .wl { font-size: 0.7rem; color: #64748b; font-weight: 700; }
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1rem 0; }
+  .feature { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: #94a3b8; font-weight: 600; }
+  .feature .tick { color: #4ade80; font-weight: 900; }
+  .contact { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1e293b; padding-top: 1rem; margin-top: 0.5rem; }
+  .phone-num { font-size: 1.4rem; font-weight: 900; color: #fff; }
+  .wa-link { color: #34d399; font-size: 0.85rem; font-weight: 700; }
+  .venue { font-size: 0.7rem; color: #475569; margin-top: 0.5rem; font-weight: 600; }
+  .qr-note { text-align: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #1e293b; }
+  .qr-note p { font-size: 0.7rem; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+  .qr-note .url { font-size: 0.8rem; color: #00f2fe; font-weight: 900; margin-top: 0.25rem; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">Admission Open · प्रवेश चालू हैं</div>
+  <h1>BHARATOS ACADEMY</h1>
+  <div class="subtitle">AI + School Studies + Future Skills</div>
+  <div class="audience">
+    <span class="tag green">Classes 8th–12th Students</span>
+    <span class="tag amber">Parents &amp; Guardians Welcome</span>
+  </div>
+  <div class="workshop-banner">
+    <div class="wt">🔥 Mega AI Workshop</div>
+    <div class="wd">14 June 2026 (Sunday)</div>
+    <div class="wl">Shahdol, M.P. · Registration Fee: ₹200</div>
+  </div>
+  <div class="features">
+    <div class="feature"><span class="tick">✔</span> Mathematics Support</div>
+    <div class="feature"><span class="tick">✔</span> Science Support</div>
+    <div class="feature"><span class="tick">✔</span> English Support</div>
+    <div class="feature"><span class="tick">✔</span> AI Skills</div>
+    <div class="feature" style="grid-column: span 2"><span class="tick">✔</span> Practical Computer Education</div>
+  </div>
+  <div class="contact">
+    <div>
+      <div style="font-size:9px; color:#475569; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;">Admission Helpline</div>
+      <div class="phone-num">📞 +91 97532 39303</div>
+      <div class="wa-link">📱 wa.me/919753239303</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:9px; color:#475569; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;">Venue</div>
+      <div class="venue">BharatOS Academy<br/>SS Motors Complex, 2nd Floor<br/>Banganga Road, Shahdol</div>
+    </div>
+  </div>
+  <div class="qr-note">
+    <p>Scan to Register Online</p>
+    <div class="url">bharatos-ai-teacher.vercel.app</div>
+  </div>
+</div>
+</body>
+</html>
