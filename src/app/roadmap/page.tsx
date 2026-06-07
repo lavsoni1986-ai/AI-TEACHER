@@ -603,6 +603,20 @@ export default function RoadmapPage() {
               <p className="text-xs text-cyan-400 font-black tracking-wide uppercase">
                 AI + School Studies + Future Skills
               </p>
+              <p className="text-[10px] text-emerald-400 font-bold tracking-wide uppercase">
+                Classes 8th–12th Students
+              </p>
+              <p className="text-[10px] text-amber-400 font-bold tracking-wide uppercase">
+                Parents & Guardians Welcome
+              </p>
+              
+              {/* Workshop Details Banner */}
+              <div className="p-2.5 rounded-xl bg-orange-950/20 border border-orange-500/30 text-center text-xs space-y-0.5 my-2">
+                <div className="font-black text-orange-400 uppercase tracking-wider">🔥 Mega AI Workshop</div>
+                <div className="text-white font-black">14 June 2026 (Sunday)</div>
+                <div className="text-slate-400 text-[10px] font-bold">Shahdol, M.P.</div>
+              </div>
+
               <p className="text-xs text-slate-400 font-semibold leading-relaxed">
                 Shahdol ke students ke liye practical AI aur modern school padhai:
               </p>

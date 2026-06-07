@@ -30,6 +30,17 @@ export default function RootLayout({
         <DemoProvider>
           {children}
         </DemoProvider>
+        {/* Global Floating WhatsApp Button */}
+        <a
+          href="https://wa.me/919753239303"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm md:text-base shadow-[0_4px_20px_rgba(16,185,129,0.4)] transition-all duration-300 hover:scale-105 active:scale-95 group"
+          id="whatsapp-admission-btn"
+        >
+          <span className="text-lg animate-bounce">📱</span>
+          <span>WhatsApp Admission</span>
+        </a>
       </body>
     </html>
   );
