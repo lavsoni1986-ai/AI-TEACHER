@@ -9,7 +9,7 @@ import WhatsAppStudyCircle from "@/components/ui/WhatsAppStudyCircle";
 import FounderVisionCard from "@/components/ui/FounderVisionCard";
 import SkillPositioningBanner from "@/components/ui/SkillPositioningBanner";
 
-const workshopMode = String(process.env.NEXT_PUBLIC_WORKSHOP_MODE).replace(/['"]/g, '') === "true";
+const workshopMode = true; // Hardcoded to true for live workshop
 
 export default function WelcomePage() {
   const router = useRouter();

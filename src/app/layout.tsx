@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: "Shahdol's AI-powered classroom assistant for Classes 8–12. Smart Study Assistant, Career Roadmaps, and more.",
 };
 
-const workshopMode = String(process.env.NEXT_PUBLIC_WORKSHOP_MODE).replace(/['"]/g, '') === "true";
+const workshopMode = true; // Hardcoded to true for live workshop
 
 export default function RootLayout({
   children,

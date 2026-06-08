@@ -13,7 +13,7 @@ import FounderVisionCard from "@/components/ui/FounderVisionCard";
 import WhatsAppStudyCircle from "@/components/ui/WhatsAppStudyCircle";
 import BringAFriendBanner from "@/components/ui/BringAFriendBanner";
 
-const workshopMode = String(process.env.NEXT_PUBLIC_WORKSHOP_MODE).replace(/['"]/g, '') === "true";
+const workshopMode = true; // Hardcoded to true for live workshop
 
 interface ChatMessage {
   sender: "student" | "teacher";
