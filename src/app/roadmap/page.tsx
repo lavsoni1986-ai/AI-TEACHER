@@ -36,6 +36,7 @@ export default function RoadmapPage() {
   // Chat/Gemini States
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamedText, setStreamedText] = useState("");
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -169,6 +170,48 @@ export default function RoadmapPage() {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
     }
+  };
+
+  // Start Speech Recognition
+  const startRecording = () => {
+    if (typeof window === "undefined") return;
+    
+    // Stop any ongoing TTS when user starts speaking
+    handleStopSpeaking();
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("आपके ब्राउज़र में वॉयस टाइपिंग सपोर्ट नहीं है। कृपया Google Chrome का उपयोग करें।");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "hi-IN";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInputText(transcript);
+      // Auto send the recorded text
+      handleSendMessage(transcript);
+      setInputText("");
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.start();
   };
 
   // Trigger Gemini greeting stream
@@ -476,30 +519,49 @@ export default function RoadmapPage() {
               </div>
             </div>
 
-            {/* Text Input Message Form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSendMessage();
-              }}
-              className="flex gap-2 pt-2 border-t border-slate-800/60"
-            >
+            {/* Hybrid UI Input (Text + Mic) */}
+            <div className="relative flex items-center gap-2 mt-2 pt-4 border-t border-slate-800/80">
               <input
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                disabled={isStreaming}
-                placeholder="AI Teacher से कोई सवाल पूछें (Ask any question)..."
-                className="flex-1 px-4 py-3 bg-slate-900/60 border border-slate-800 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:border-[#00f2fe] disabled:opacity-70 font-semibold"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && inputText.trim() && !isStreaming) {
+                    handleSendMessage(inputText.trim());
+                    setInputText("");
+                  }
+                }}
+                placeholder={isRecording ? "सुन रहा हूँ... बोलिए (Listening...)" : "AI Teacher से कोई सवाल पूछें (Ask any question)..."}
+                disabled={isStreaming || isRecording}
+                className={`flex-1 bg-slate-900/60 border rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none transition-all disabled:opacity-70 font-semibold ${isRecording ? "border-rose-500/50 shadow-[0_0_10px_rgba(244,63,94,0.1)]" : "border-slate-800 focus:border-[#00f2fe]"}`}
               />
+              
               <button
-                type="submit"
-                disabled={isStreaming || !inputText.trim()}
-                className="px-5 py-3 bg-[#00f2fe] hover:bg-[#4facfe] disabled:bg-slate-800 disabled:text-slate-500 font-bold text-slate-950 rounded-xl cursor-pointer transition-colors"
+                onClick={isRecording ? () => {} : startRecording}
+                disabled={isStreaming}
+                title="बोलकर सवाल पूछें"
+                className={`p-3 rounded-xl border transition-all flex items-center justify-center shrink-0 min-w-[48px] min-h-[48px] cursor-pointer ${
+                  isRecording 
+                    ? "bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.4)]" 
+                    : "bg-slate-900 border-slate-800 hover:border-[#00f2fe] hover:bg-[#00f2fe]/10 text-[#00f2fe] disabled:opacity-50"
+                }`}
+              >
+                <span className="text-xl">🎤</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  if (inputText.trim() && !isStreaming) {
+                    handleSendMessage(inputText.trim());
+                    setInputText("");
+                  }
+                }}
+                disabled={!inputText.trim() || isStreaming || isRecording}
+                className="px-5 py-3 bg-[#00f2fe] hover:bg-[#4facfe] disabled:bg-slate-800 disabled:text-slate-500 font-bold text-slate-950 rounded-xl transition-all cursor-pointer shrink-0"
               >
                 भेजें (Send)
               </button>
-            </form>
+            </div>
           </div>
 
           {/* 4 Month Roadmap timeline panel */}
