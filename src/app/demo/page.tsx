@@ -40,6 +40,10 @@ export default function DemoPage() {
   const [streamedText, setStreamedText] = useState("");
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Speech to Text States
+  const [isRecording, setIsRecording] = useState(false);
+  const [textInput, setTextInput] = useState("");
+
   // Voice States
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -173,6 +177,48 @@ export default function DemoPage() {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
     }
+  };
+
+  // Start Speech Recognition
+  const startRecording = () => {
+    if (typeof window === "undefined") return;
+    
+    // Stop any ongoing TTS when user starts speaking
+    handleStopSpeaking();
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("आपके ब्राउज़र में वॉयस टाइपिंग सपोर्ट नहीं है। कृपया Google Chrome का उपयोग करें।");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "hi-IN";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setTextInput(transcript);
+      // Auto send the recorded text
+      handleQuestionClick(transcript);
+      setTextInput("");
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.start();
   };
 
   const handleOnboardSubmit = (e: React.FormEvent) => {
@@ -767,10 +813,10 @@ export default function DemoPage() {
                 <div ref={chatEndRef} />
               </div>
 
-              {/* Quick interactive questions */}
+              {/* Quick interactive questions and Hybrid UI */}
               <div className="border border-slate-800 bg-slate-950 p-4 rounded-b-2xl shrink-0">
                 <div className="text-xs font-bold text-slate-500 mb-2">पूछने के लिए किसी एक प्रश्न पर क्लिक करें (Click to ask):</div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 mb-4">
                   {activeQuestions.map((qText, idx) => (
                     <button
                       key={idx}
@@ -781,6 +827,50 @@ export default function DemoPage() {
                       💬 {qText}
                     </button>
                   ))}
+                </div>
+
+                {/* Hybrid UI Input (Text + Mic) */}
+                <div className="relative flex items-center gap-2 mt-2 pt-4 border-t border-slate-800/80">
+                  <input
+                    type="text"
+                    value={textInput}
+                    onChange={(e) => setTextInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && textInput.trim() && !isStreaming) {
+                        handleQuestionClick(textInput.trim());
+                        setTextInput("");
+                      }
+                    }}
+                    placeholder={isRecording ? "सुन रहा हूँ... बोलिए (Listening...)" : "अपना सवाल टाइप करें या माइक दबाकर बोलें..."}
+                    disabled={isStreaming || isRecording}
+                    className={`flex-1 bg-slate-900/60 border rounded-xl px-4 py-3 text-sm md:text-base text-white placeholder-slate-500 focus:outline-none transition-all disabled:opacity-50 ${isRecording ? "border-rose-500/50 shadow-[0_0_10px_rgba(244,63,94,0.1)]" : "border-slate-800 focus:border-cyan-500"}`}
+                  />
+                  
+                  <button
+                    onClick={isRecording ? () => {} : startRecording}
+                    disabled={isStreaming}
+                    title="बोलकर सवाल पूछें"
+                    className={`p-3 rounded-xl border transition-all flex items-center justify-center shrink-0 min-w-[50px] min-h-[50px] cursor-pointer ${
+                      isRecording 
+                        ? "bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.4)]" 
+                        : "bg-slate-900 border-slate-800 hover:border-cyan-500 hover:bg-cyan-500/10 text-cyan-400 disabled:opacity-50"
+                    }`}
+                  >
+                    <span className="text-xl">🎤</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      if (textInput.trim() && !isStreaming) {
+                        handleQuestionClick(textInput.trim());
+                        setTextInput("");
+                      }
+                    }}
+                    disabled={!textInput.trim() || isStreaming || isRecording}
+                    className="px-4 py-3 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded-xl font-bold transition-all disabled:opacity-50 cursor-pointer shrink-0"
+                  >
+                    Send
+                  </button>
                 </div>
               </div>
 
