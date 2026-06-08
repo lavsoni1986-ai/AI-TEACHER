@@ -14,7 +14,7 @@ import FounderVisionCard from "@/components/ui/FounderVisionCard";
 import WhatsAppStudyCircle from "@/components/ui/WhatsAppStudyCircle";
 import BringAFriendBanner from "@/components/ui/BringAFriendBanner";
 
-const workshopMode = process.env.NEXT_PUBLIC_WORKSHOP_MODE === "true";
+const workshopMode = String(process.env.NEXT_PUBLIC_WORKSHOP_MODE).replace(/['"]/g, '') === "true";
 
 interface Message {
   sender: "student" | "teacher";
