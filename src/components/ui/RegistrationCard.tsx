@@ -5,7 +5,7 @@ interface RegistrationCardProps {
 }
 
 export default function RegistrationCard({ className = "" }: RegistrationCardProps) {
-  const registered = parseInt(process.env.NEXT_PUBLIC_REGISTERED_COUNT || "47", 10);
+  const registered = parseInt(process.env.NEXT_PUBLIC_REGISTERED_COUNT || "1", 10);
   const total = parseInt(process.env.NEXT_PUBLIC_TOTAL_SEATS || "100", 10);
   const remaining = Math.max(0, total - registered);
   const fillPercent = Math.min(100, Math.round((registered / total) * 100));

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshop Day Demo Checklist</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; background: #0f172a; color: #f1f5f9; }
+    h1 { color: #f97316; text-align: center; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { margin: 15px 0; padding: 15px; background: #1e293b; border-radius: 8px; border: 1px solid #334155; display: flex; align-items: center; cursor: pointer; transition: background 0.2s; }
+    .checklist li:hover { background: #334155; }
+    .checklist input[type="checkbox"] { width: 24px; height: 24px; margin-right: 15px; cursor: pointer; }
+    .completed { text-decoration: line-through; color: #64748b; }
+    .note { font-size: 0.9em; color: #94a3b8; margin-top: 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>🔥 Mega AI Workshop Checklist</h1>
+  <p style="text-align: center; color: #cbd5e1; font-weight: bold;">14 June 2026 - Emergency Operator Checklist</p>
+  
+  <ul class="checklist" id="checklist">
+    <li><input type="checkbox"> <span>Internet Connected</span></li>
+    <li><input type="checkbox"> <span>Voice Working</span></li>
+    <li><input type="checkbox"> <span>Groq Working</span></li>
+    <li><input type="checkbox"> <span>Gemini Backup Working</span></li>
+    <li><input type="checkbox"> <span>WhatsApp Button Working</span></li>
+    <li><input type="checkbox"> <span>Registration Counter Updated</span></li>
+    <li><input type="checkbox"> <span>Projector Tested</span></li>
+    <li><input type="checkbox"> <span>Audio Tested</span></li>
+    <li><input type="checkbox"> <span>Demo Questions Ready</span></li>
+  </ul>
+
+  <p class="note">✅ Verify all items before starting the workshop projector.</p>
+
+  <script>
+    const listItems = document.querySelectorAll('.checklist li');
+    listItems.forEach(li => {
+      const checkbox = li.querySelector('input');
+      const span = li.querySelector('span');
+      
+      li.addEventListener('click', (e) => {
+        if (e.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+        }
+        if (checkbox.checked) {
+          span.classList.add('completed');
+        } else {
+          span.classList.remove('completed');
+        }
+      });
+
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          span.classList.add('completed');
+        } else {
+          span.classList.remove('completed');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

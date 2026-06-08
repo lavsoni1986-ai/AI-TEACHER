@@ -212,6 +212,9 @@ export default function DemoPage() {
     recognition.onerror = (event: any) => {
       console.error("Speech recognition error", event.error);
       setIsRecording(false);
+      if (event.error === 'not-allowed' || event.error === 'permission-denied') {
+        alert("Microphone access required. Please click Allow and try again. Or type your question below.");
+      }
     };
 
     recognition.onend = () => {
@@ -850,13 +853,14 @@ export default function DemoPage() {
                     onClick={isRecording ? () => {} : startRecording}
                     disabled={isStreaming}
                     title="बोलकर सवाल पूछें"
-                    className={`p-3 rounded-xl border transition-all flex items-center justify-center shrink-0 min-w-[50px] min-h-[50px] cursor-pointer ${
+                    className={`rounded-xl border transition-all flex items-center justify-center shrink-0 w-[56px] h-[56px] md:w-[72px] md:h-[72px] cursor-pointer ${
                       isRecording 
-                        ? "bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.4)]" 
+                        ? "bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.4)] md:w-auto md:px-6" 
                         : "bg-slate-900 border-slate-800 hover:border-cyan-500 hover:bg-cyan-500/10 text-cyan-400 disabled:opacity-50"
                     }`}
                   >
-                    <span className="text-xl">🎤</span>
+                    <span className="text-2xl md:text-3xl">🎤</span>
+                    {isRecording && <span className="hidden md:inline-block ml-2 font-black text-sm text-rose-400">सुन रहा हूँ...</span>}
                   </button>
                   
                   <button

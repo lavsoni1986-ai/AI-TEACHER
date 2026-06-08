@@ -13,15 +13,17 @@ export default function FounderVisionCard({ className = "" }: FounderVisionCardP
         <div className="text-[10px] font-black text-cyan-500/80 uppercase tracking-[0.25em]">
           हमारा सपना
         </div>
-        <blockquote className="text-lg md:text-xl font-black text-white leading-snug">
-          "Shahdol का पहला student
+        <div className="text-[10px] md:text-xs font-black text-cyan-400 uppercase tracking-widest pt-1">
+          AI + School Studies + Future Skills
+        </div>
+        <blockquote className="text-base md:text-lg font-black text-white leading-snug">
+          "BharatOS Academy का लक्ष्य है:
           <br />
-          जिसने AI से Board में{" "}
-          <span className="text-cyan-400">90% लाया।"</span>
+          बच्चों को पढ़ाई, AI और practical skills में मजबूत बनाना।"
         </blockquote>
         <p className="text-xs text-slate-400 font-semibold leading-relaxed max-w-sm mx-auto">
-          Technology दिखाना हमारा काम नहीं।<br />
-          <strong className="text-slate-200">बच्चों का भविष्य बनाना</strong> हमारा काम है।
+          Hum degree ka replacement nahi,<br />
+          <strong className="text-slate-200">learning aur future skills ka support system hain.</strong>
         </p>
       </div>
 

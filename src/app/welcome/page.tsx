@@ -8,6 +8,7 @@ import BringAFriendBanner from "@/components/ui/BringAFriendBanner";
 import WhatsAppStudyCircle from "@/components/ui/WhatsAppStudyCircle";
 import FounderVisionCard from "@/components/ui/FounderVisionCard";
 import SkillPositioningBanner from "@/components/ui/SkillPositioningBanner";
+import RegistrationCard from "@/components/ui/RegistrationCard";
 
 const workshopMode = true; // Hardcoded to true for live workshop
 
@@ -112,22 +113,8 @@ export default function WelcomePage() {
           </div>
         </div>
 
-        {/* Workshop Teaser — Workshop Mode Only */}
-        {workshopMode && (
-          <div className="w-full p-4 rounded-2xl bg-orange-950/20 border border-orange-500/30 text-center space-y-1">
-            <div className="text-xs font-black text-orange-400 uppercase tracking-widest">🔥 Mega AI Workshop</div>
-            <div className="text-sm font-black text-white">14 June 2026 (Sunday) · Shahdol, M.P.</div>
-            <div className="text-xs text-slate-400 font-semibold">Classes 8–12 · Parents Welcome · ₹200</div>
-            <a
-              href="https://wa.me/919753239303"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-1 text-xs font-black text-emerald-400 hover:text-emerald-300 transition-colors"
-            >
-              📱 Register via WhatsApp → 9753239303
-            </a>
-          </div>
-        )}
+        {/* Registration Counter — Workshop Mode Only */}
+        {workshopMode && <RegistrationCard />}
 
         {/* Founder Vision */}
         <FounderVisionCard />
