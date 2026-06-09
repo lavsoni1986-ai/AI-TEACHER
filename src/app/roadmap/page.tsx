@@ -30,7 +30,8 @@ export default function RoadmapPage() {
     roadmap,
     completedTasks,
     toggleTask,
-    resetDemo
+    resetDemo,
+    incrementQuestions
   } = useDemo();
 
   // Chat/Gemini States
@@ -50,6 +51,17 @@ export default function RoadmapPage() {
     if (!name) {
       router.push("/welcome");
     } else if (selectedCareer && messages.length === 0) {
+      // Load chat history from localStorage first
+      try {
+        const saved = localStorage.getItem("bharatos_chat_history");
+        if (saved) {
+          const parsed: Message[] = JSON.parse(saved);
+          if (parsed.length > 0) {
+            setMessages(parsed);
+            return; // Don't trigger greeting if history exists
+          }
+        }
+      } catch { /* ignore */ }
       // Trigger initial AI Teacher greeting
       triggerInitialGreeting();
     }
@@ -296,6 +308,10 @@ export default function RoadmapPage() {
 
     const updatedMessages = [...messages, { sender: "student" as const, text: textToSend }];
     setMessages(updatedMessages);
+    // Save to localStorage & track usage
+    const trimmed = updatedMessages.slice(-50);
+    localStorage.setItem("bharatos_chat_history", JSON.stringify(trimmed));
+    incrementQuestions();
     setInputText("");
     setIsStreaming(true);
     setStreamedText("");
@@ -334,7 +350,11 @@ export default function RoadmapPage() {
         setStreamedText(textAccumulator);
       }
 
-      setMessages((prev) => [...prev, { sender: "teacher", text: textAccumulator }]);
+      setMessages((prev) => {
+        const next = [...prev, { sender: "teacher" as const, text: textAccumulator }];
+        localStorage.setItem("bharatos_chat_history", JSON.stringify(next.slice(-50)));
+        return next;
+      });
       setStreamedText("");
       // Speak response
       speakText(textAccumulator);
@@ -406,6 +426,12 @@ export default function RoadmapPage() {
             className="px-4 py-2 text-xs font-bold text-slate-300 border border-slate-800 bg-slate-900/40 rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
           >
             ← कैरियर बदलें
+          </button>
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="px-4 py-2 text-xs font-bold text-cyan-300 border border-cyan-900/40 bg-cyan-950/20 rounded-xl hover:bg-cyan-900/30 transition-colors cursor-pointer"
+          >
+            📊 My Progress
           </button>
           <button
             onClick={handleRestart}

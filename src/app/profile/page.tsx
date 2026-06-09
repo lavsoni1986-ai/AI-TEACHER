@@ -7,8 +7,9 @@ import HexagonTreeLogo from "@/components/ui/HexagonTreeLogo";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { name, setName, classCategory, setClassCategory } = useDemo();
+  const { name, setName, school, setSchool, classCategory, setClassCategory } = useDemo();
   const [localName, setLocalName] = useState(name);
+  const [localSchool, setLocalSchool] = useState(school);
   const [localClass, setLocalClass] = useState(classCategory);
   const [error, setError] = useState("");
 
@@ -18,12 +19,17 @@ export default function ProfilePage() {
       setError("कृपया अपना नाम दर्ज करें (Please enter your name)");
       return;
     }
+    if (!localSchool.trim()) {
+      setError("कृपया अपने स्कूल का नाम दर्ज करें (Please enter your school)");
+      return;
+    }
     if (!localClass) {
       setError("कृपया अपनी क्लास चुनें (Please select your class)");
       return;
     }
     setError("");
     setName(localName.trim());
+    setSchool(localSchool.trim());
     setClassCategory(localClass);
     router.push("/career");
   };
@@ -51,7 +57,7 @@ export default function ProfilePage() {
         <div className="text-center space-y-2">
           <div className="text-xs font-bold text-bharat-orange tracking-widest uppercase">कदम 1/2 (Step 1/2)</div>
           <h2 className="text-3xl font-extrabold text-white">आपकी जानकारी</h2>
-          <p className="text-slate-400 text-sm">शुरुआत करने के लिए अपना नाम और क्लास चुनें</p>
+          <p className="text-slate-400 text-sm">शुरुआत करने के लिए नाम, स्कूल और क्लास दर्ज करें</p>
         </div>
 
         {/* Error notification */}
@@ -61,20 +67,31 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name Field */}
           <div className="space-y-2">
             <label className="block text-sm font-bold text-slate-300">
-              आपका नाम (Student Name)
+              👤 आपका नाम (Student Name)
             </label>
             <input
               type="text"
               placeholder="यहाँ अपना नाम लिखें..."
               value={localName}
-              onChange={(e) => {
-                setLocalName(e.target.value);
-                if (error) setError("");
-              }}
+              onChange={(e) => { setLocalName(e.target.value); if (error) setError(""); }}
+              className="w-full px-5 py-4 bg-slate-900/60 border border-slate-800 rounded-2xl text-white text-lg placeholder-slate-600 focus:outline-none focus:border-[#00f2fe] focus:ring-1 focus:ring-[#00f2fe] transition-all font-semibold"
+            />
+          </div>
+
+          {/* School Field */}
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-slate-300">
+              🏫 आपके स्कूल का नाम (School Name)
+            </label>
+            <input
+              type="text"
+              placeholder="जैसे: Saraswati Vidya Mandir, Shahdol"
+              value={localSchool}
+              onChange={(e) => { setLocalSchool(e.target.value); if (error) setError(""); }}
               className="w-full px-5 py-4 bg-slate-900/60 border border-slate-800 rounded-2xl text-white text-lg placeholder-slate-600 focus:outline-none focus:border-[#00f2fe] focus:ring-1 focus:ring-[#00f2fe] transition-all font-semibold"
             />
           </div>
@@ -82,7 +99,7 @@ export default function ProfilePage() {
           {/* Class Category */}
           <div className="space-y-3">
             <label className="block text-sm font-bold text-slate-300">
-              आपकी क्लास / लेवल (Select Class)
+              📚 आपकी क्लास / लेवल (Select Class)
             </label>
             <div className="grid grid-cols-1 gap-3">
               {classes.map((cls) => {
@@ -91,10 +108,7 @@ export default function ProfilePage() {
                   <button
                     key={cls.key}
                     type="button"
-                    onClick={() => {
-                      setLocalClass(cls.key);
-                      if (error) setError("");
-                    }}
+                    onClick={() => { setLocalClass(cls.key); if (error) setError(""); }}
                     className={`flex items-center justify-between px-6 py-4 rounded-2xl border text-left cursor-pointer transition-all duration-200 ${
                       isSelected
                         ? "border-[#00f2fe] bg-[#00f2fe]/5 text-white shadow-[0_0_15px_rgba(0,242,254,0.05)]"
@@ -121,7 +135,7 @@ export default function ProfilePage() {
             type="submit"
             className="w-full py-4 text-lg font-bold text-slate-950 bg-gradient-to-r from-bharat-orange to-bharat-amber rounded-2xl cursor-pointer shadow-lg shadow-bharat-orange/10 transition-all duration-300 transform hover:scale-[1.01] active:scale-98"
           >
-            आगे बढ़ें (Select Dream Career) →
+            आगे बढ़ें (Select Dream Career) →
           </button>
         </form>
 

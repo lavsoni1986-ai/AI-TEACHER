@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ROADMAP_DATA, TimelineItem } from "@/context/DemoContext";
+import { ROADMAP_DATA, TimelineItem, useDemo } from "@/context/DemoContext";
 import HexagonTreeLogo from "@/components/ui/HexagonTreeLogo";
 import { getFallbackMessage } from "@/lib/fallbackTeacher";
 import RegistrationCard from "@/components/ui/RegistrationCard";
@@ -21,6 +21,8 @@ interface ChatMessage {
 }
 
 export default function DemoPage() {
+  const { incrementQuestions } = useDemo();
+
   // Onboarding & Demo states
   const [step, setStep] = useState<"onboard" | "career" | "generating" | "result">("onboard");
   const [name, setName] = useState("");
@@ -66,6 +68,17 @@ export default function DemoPage() {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
+  }, []);
+
+  // Load chat history from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("bharatos_chat_history");
+      if (saved) {
+        const parsed: ChatMessage[] = JSON.parse(saved);
+        if (parsed.length > 0) setChatHistory(parsed);
+      }
+    } catch { /* ignore */ }
   }, []);
 
   // Auto-scroll chat to bottom
@@ -394,6 +407,10 @@ export default function DemoPage() {
     
     const updatedHistory = [...chatHistory, { sender: "student" as const, text: questionText }];
     setChatHistory(updatedHistory);
+    // Save to localStorage & increment usage
+    const trimmed = updatedHistory.slice(-50);
+    localStorage.setItem("bharatos_chat_history", JSON.stringify(trimmed));
+    incrementQuestions();
     setIsStreaming(true);
     setStreamedText("");
 
@@ -434,7 +451,11 @@ export default function DemoPage() {
         setStreamedText(textAccumulator);
       }
 
-      setChatHistory((prev) => [...prev, { sender: "teacher", text: textAccumulator }]);
+      setChatHistory((prev) => {
+        const next = [...prev, { sender: "teacher" as const, text: textAccumulator }];
+        localStorage.setItem("bharatos_chat_history", JSON.stringify(next.slice(-50)));
+        return next;
+      });
       setStreamedText("");
       // Speak follow-up
       speakText(textAccumulator);

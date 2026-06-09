@@ -70,7 +70,7 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
     timeline: [
       { num: "Month 1", title: "HTML Structures (वेबसाइट का ढांचा)", subtopic: "Web Blueprint", desc: "हेडिंग, फोटो और बटन लगाकर वेबसाइट का पहला पन्ना बनाना।" },
       { num: "Month 2", title: "CSS Styles & design (वेबसाइट डिजाइन और स्टाइल)", subtopic: "Neon CSS", desc: "वेबसाइट को रंगीन और सुंदर डिजाइन देना सीखना।" },
-      { num: "Month 3", title: "JavaScript Interaction (वेबसाइट में बटन और एक्शन)", subtopic: "Dynamic DOM", desc: "वेबसाइट में बटन दबाने पर काम करने वाले कैलकुलेटर जैसे फीचर्स जोड़ना।" },
+      { num: "Month 3", title: "JavaScript Interaction (वेबसाइट में बटन और एक्शन)", subtopic: "Dynamic DOM", desc: "वेबसाइट में बटन दबाने पर काम करने वाले कैलकुलेटर जैसे फीचर्स जोड़ना।" },
       { num: "Month 4", title: "React Web App (मॉडर्न वेब एप्लीकेशन)", subtopic: "Deployment", desc: "वेबसाइट को इंटरनेट पर लाइव करके दुनिया को दिखाना।" }
     ],
     recommendedCourse: "Web Dev Essentials - BharatOS Academy",
@@ -88,9 +88,9 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
     duration: 4,
     durationLabel: "महीने",
     timeline: [
-      { num: "Month 1", title: "Scratch Games (स्क्रैच गेम मेकिंग)", subtopic: "Game Logic", desc: "आसान ब्लॉक जोड़कर चलने-दौड़ने वाले गेम बनाना सीखना।" },
-      { num: "Month 2", title: "HTML Games (वेब ब्राउज़र गेम्स)", subtopic: "UI Elements", desc: "कंप्यूटर स्क्रीन पर दिखने वाले कंट्रोल और बटन बनाना।" },
-      { num: "Month 3", title: "JavaScript Basics (जावास्क्रिप्ट गेम लॉजिक)", subtopic: "Physics Engine", desc: "गेम के किरदारों में कूदने, दौड़ने और टकराने के नियम डालना।" },
+      { num: "Month 1", title: "Scratch Games (स्क्रैच गेम मेकिंग)", subtopic: "Game Logic", desc: "आसान ब्लॉक जोड़कर चलने-दौड़ने वाले गेम बनाना सीखना।" },
+      { num: "Month 2", title: "HTML Games (वेब ब्राउज़र गेम्स)", subtopic: "UI Elements", desc: "कंप्यूटर स्क्रीन पर दिखने वाले कंट्रोल और बटन बनाना।" },
+      { num: "Month 3", title: "JavaScript Basics (जावास्क्रिप्ट गेम लॉजिक)", subtopic: "Physics Engine", desc: "गेम के किरदारों में कूदने, दौड़ने और टकराने के नियम डालना।" },
       { num: "Month 4", title: "AI Assisted Game Development (एआई और गेम डिज़ाइन)", subtopic: "Game AI Bots", desc: "गेम के दुश्मनों को खुद से दिमाग चलाना (एआई) सिखाना।" }
     ],
     recommendedCourse: "Game Coding & Logic Bootcamp - BharatOS Academy",
@@ -109,7 +109,7 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
     durationLabel: "महीने",
     timeline: [
       { num: "Month 1", title: "Figma App UI (मोबाइल ऐप डिजाइन)", subtopic: "App Design", desc: "मोबाइल स्क्रीन पर ऐप कैसा दिखेगा, उसका सुंदर डिजाइन बनाना।" },
-      { num: "Month 2", title: "App Building Blocks (ऐप लॉजिक और स्क्रीन्स)", subtopic: "Visual Layouts", desc: "बटन दबाने पर दूसरी स्क्रीन खुलने का लॉजिक जोड़ना।" },
+      { num: "Month 2", title: "App Building Blocks (ऐप लॉजिक और स्क्रीन्स)", subtopic: "Visual Layouts", desc: "बटन दबाने पर दूसरी स्क्रीन खुलने का लॉजिक जोड़ना।" },
       { num: "Month 3", title: "Database & Local Settings (डेटाबेस और लोकल सेटिंग्स)", subtopic: "App Storage", desc: "ऐप में यूजर का नाम, फोटो और सेटिंग्स सुरक्षित सेव करना।" },
       { num: "Month 4", title: "Publishing App APK (एंड्रॉइड ऐप पब्लिश करना)", subtopic: "Android Deploy", desc: "ऐप की फाइल बनाकर अपने फोन में इंस्टॉल करना।" }
     ],
@@ -189,9 +189,13 @@ export const ROADMAP_DATA: Record<string, RoadmapDetails> = {
   }
 };
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+
 interface DemoContextType {
   name: string;
   setName: (name: string) => void;
+  school: string;
+  setSchool: (school: string) => void;
   classCategory: string;
   setClassCategory: (cat: string) => void;
   selectedCareer: string;
@@ -201,37 +205,68 @@ interface DemoContextType {
   toggleTask: (task: string) => void;
   resetDemo: () => void;
   welcomeMessage: string;
+  // Usage Tracking
+  questionsAsked: number;
+  incrementQuestions: () => void;
+  lastActive: string;
+  sessionCount: number;
 }
 
 const DemoContext = createContext<DemoContextType | undefined>(undefined);
 
+// ─── Provider ────────────────────────────────────────────────────────────────
+
 export const DemoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [name, setNameState] = useState<string>("");
+  const [school, setSchoolState] = useState<string>("");
   const [classCategory, setClassCategoryState] = useState<string>("");
   const [selectedCareer, setSelectedCareerState] = useState<string>("");
   const [roadmap, setRoadmap] = useState<RoadmapDetails | null>(null);
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
-  const [welcomeMessage, setWelcomeMessage] = useState<string>("");
+  const [welcomeMessage] = useState<string>("");
+  // Usage Tracking
+  const [questionsAsked, setQuestionsAsked] = useState<number>(0);
+  const [lastActive, setLastActive] = useState<string>("");
+  const [sessionCount, setSessionCount] = useState<number>(0);
 
-  // Load state from localStorage on init (safe for Next.js client)
+  // ── Load from localStorage on mount ──────────────────────────────────────
   useEffect(() => {
-    const savedName = localStorage.getItem("bharatos_name") || "";
-    const savedClass = localStorage.getItem("bharatos_class") || "";
-    const savedCareer = localStorage.getItem("bharatos_career") || "";
-    const savedTasks = JSON.parse(localStorage.getItem("bharatos_tasks") || "[]");
+    const savedName     = localStorage.getItem("bharatos_name")        || "";
+    const savedSchool   = localStorage.getItem("bharatos_school")      || "";
+    const savedClass    = localStorage.getItem("bharatos_class")       || "";
+    const savedCareer   = localStorage.getItem("bharatos_career")      || "";
+    const savedTasks    = JSON.parse(localStorage.getItem("bharatos_tasks")    || "[]");
+    const savedQ        = parseInt(localStorage.getItem("bharatos_questions")  || "0", 10);
+    const savedLA       = localStorage.getItem("bharatos_last_active")         || "";
+    const savedSessions = parseInt(localStorage.getItem("bharatos_sessions")   || "0", 10);
 
     setNameState(savedName);
+    setSchoolState(savedSchool);
     setClassCategoryState(savedClass);
     if (savedCareer) {
       setSelectedCareerState(savedCareer);
       setRoadmap(ROADMAP_DATA[savedCareer] || null);
     }
     setCompletedTasks(savedTasks);
+    setQuestionsAsked(savedQ);
+    setLastActive(savedLA);
+
+    // Increment session count every time the app is loaded
+    const newSessionCount = savedSessions + 1;
+    setSessionCount(newSessionCount);
+    localStorage.setItem("bharatos_sessions", String(newSessionCount));
   }, []);
+
+  // ── Setters ───────────────────────────────────────────────────────────────
 
   const setName = (newName: string) => {
     setNameState(newName);
     localStorage.setItem("bharatos_name", newName);
+  };
+
+  const setSchool = (newSchool: string) => {
+    setSchoolState(newSchool);
+    localStorage.setItem("bharatos_school", newSchool);
   };
 
   const setClassCategory = (newClass: string) => {
@@ -259,33 +294,44 @@ export const DemoProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("bharatos_tasks", JSON.stringify(updated));
   };
 
+  const incrementQuestions = () => {
+    const newCount = questionsAsked + 1;
+    setQuestionsAsked(newCount);
+    localStorage.setItem("bharatos_questions", String(newCount));
+    const now = new Date().toISOString();
+    setLastActive(now);
+    localStorage.setItem("bharatos_last_active", now);
+  };
+
   const resetDemo = () => {
-    setNameState("");
-    setClassCategoryState("");
-    setSelectedCareerState("");
-    setRoadmap(null);
-    setCompletedTasks([]);
-    setWelcomeMessage("");
+    setNameState(""); setSchoolState(""); setClassCategoryState("");
+    setSelectedCareerState(""); setRoadmap(null); setCompletedTasks([]);
+    setQuestionsAsked(0); setLastActive(""); setSessionCount(0);
     localStorage.removeItem("bharatos_name");
+    localStorage.removeItem("bharatos_school");
     localStorage.removeItem("bharatos_class");
     localStorage.removeItem("bharatos_career");
     localStorage.removeItem("bharatos_tasks");
+    localStorage.removeItem("bharatos_questions");
+    localStorage.removeItem("bharatos_last_active");
+    localStorage.removeItem("bharatos_sessions");
+    localStorage.removeItem("bharatos_chat_history");
   };
 
   return (
     <DemoContext.Provider
       value={{
-        name,
-        setName,
-        classCategory,
-        setClassCategory,
-        selectedCareer,
-        setSelectedCareer,
+        name, setName,
+        school, setSchool,
+        classCategory, setClassCategory,
+        selectedCareer, setSelectedCareer,
         roadmap,
-        completedTasks,
-        toggleTask,
+        completedTasks, toggleTask,
         resetDemo,
-        welcomeMessage
+        welcomeMessage,
+        questionsAsked, incrementQuestions,
+        lastActive,
+        sessionCount,
       }}
     >
       {children}
