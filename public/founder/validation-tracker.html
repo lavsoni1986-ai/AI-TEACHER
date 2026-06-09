@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BharatOS — Founder Validation Tracker</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0f1a; color: #f1f5f9; min-height: 100vh; padding: 20px; }
+
+    h1 { font-size: 1.4rem; font-weight: 900; color: #fff; letter-spacing: 0.05em; }
+    .sub { font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* Stat Cards */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0; }
+    .stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 16px; text-align: center; }
+    .stat-card .num { font-size: 2.2rem; font-weight: 900; color: #fff; }
+    .stat-card .lbl { font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+    .stat-card.cyan .num { color: #00f2fe; }
+    .stat-card.orange .num { color: #f97316; }
+    .stat-card.green .num { color: #34d399; }
+    .stat-card.rose .num { color: #fb7185; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; margin: 20px 0 16px; flex-wrap: wrap; }
+    .tab { padding: 8px 16px; border-radius: 10px; font-size: 0.75rem; font-weight: 800; cursor: pointer; border: 1px solid #334155; background: #1e293b; color: #94a3b8; transition: all 0.2s; }
+    .tab.active { background: #00f2fe1a; border-color: #00f2fe88; color: #00f2fe; }
+
+    /* Panels */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Form */
+    .add-form { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+    .add-form h3 { font-size: 0.75rem; font-weight: 900; color: #00f2fe; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 14px; }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 10px; }
+    .form-row input, .form-row select { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; color: #f1f5f9; font-size: 0.85rem; font-weight: 600; width: 100%; }
+    .form-row input:focus, .form-row select:focus { outline: none; border-color: #00f2fe; }
+    .add-btn { background: linear-gradient(135deg, #00f2fe, #4facfe); color: #0a0f1a; font-weight: 900; font-size: 0.85rem; border: none; border-radius: 10px; padding: 10px 24px; cursor: pointer; margin-top: 6px; }
+    .add-btn:hover { opacity: 0.88; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    thead th { background: #0f172a; padding: 10px 12px; text-align: left; font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid #1e293b; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid #1e293b; transition: background 0.15s; }
+    tbody tr:hover { background: #1e293b55; }
+    td { padding: 10px 12px; color: #cbd5e1; vertical-align: middle; white-space: nowrap; }
+    td .name { font-weight: 800; color: #f1f5f9; }
+    td .school { font-size: 0.7rem; color: #64748b; }
+
+    /* Score Badge */
+    .score-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-weight: 900; font-size: 0.72rem; }
+    .score-high { background: #064e3b; color: #34d399; border: 1px solid #065f46; }
+    .score-mid  { background: #1c3766; color: #60a5fa; border: 1px solid #1e40af; }
+    .score-low  { background: #450a0a; color: #fb7185; border: 1px solid #7f1d1d; }
+
+    /* Retention Dots */
+    .dots { display: flex; gap: 5px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; border: 1px solid #334155; cursor: pointer; transition: all 0.2s; }
+    .dot.active { border-color: #34d399; background: #34d399; }
+
+    /* Feedback Panel */
+    .feedback-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .feedback-card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px; }
+    .feedback-card h4 { font-size: 0.7rem; font-weight: 900; color: #00f2fe; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+    .q-row { margin-bottom: 10px; }
+    .q-row label { font-size: 0.75rem; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px; }
+    .q-row .options { display: flex; gap: 6px; flex-wrap: wrap; }
+    .q-row .opt { padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; border: 1px solid #334155; background: #0f172a; color: #94a3b8; transition: all 0.2s; }
+    .q-row .opt.sel { border-color: #00f2fe88; background: #00f2fe1a; color: #00f2fe; }
+
+    /* Export */
+    .export-btn { background: #1e293b; border: 1px solid #334155; color: #94a3b8; font-weight: 800; font-size: 0.75rem; border-radius: 10px; padding: 8px 18px; cursor: pointer; margin-right: 8px; margin-bottom: 8px; }
+    .export-btn:hover { border-color: #64748b; color: #f1f5f9; }
+
+    /* Retention summary */
+    .retention-bar { height: 6px; border-radius: 4px; background: #1e293b; overflow: hidden; margin-top: 3px; }
+    .retention-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #00f2fe, #34d399); transition: width 0.5s; }
+
+    .empty-state { text-align: center; padding: 40px 20px; color: #475569; font-weight: 700; font-size: 0.85rem; }
+    .delete-btn { background: none; border: none; color: #475569; cursor: pointer; font-size: 0.9rem; padding: 2px 6px; border-radius: 6px; }
+    .delete-btn:hover { color: #fb7185; background: #450a0a44; }
+    .header-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+    .pill { padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 800; background: #0f172a; border: 1px solid #334155; color: #64748b; }
+    .pill.live { border-color: #065f4688; color: #34d399; background: #064e3b44; }
+    .pill.live::before { content: "● "; }
+  </style>
+</head>
+<body>
+
+<div style="max-width:1200px;margin:0 auto;">
+
+  <!-- Header -->
+  <div class="header-row" style="padding-bottom:16px;border-bottom:1px solid #1e293b;margin-bottom:20px;">
+    <div>
+      <div class="sub" style="margin-bottom:4px;">BharatOS Academy · Founder Use Only</div>
+      <h1>📊 Validation Tracker — First 100 Students</h1>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span class="pill live" id="studentCount">0 / 100 Students</span>
+      <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="export-btn" onclick="clearAll()" style="color:#fb7185;border-color:#7f1d1d44;">🗑 Clear All</button>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="stats" id="statsRow">
+    <div class="stat-card cyan"><div class="num" id="statTotal">0</div><div class="lbl">Total Students</div></div>
+    <div class="stat-card orange"><div class="num" id="statSchools">0</div><div class="lbl">Schools</div></div>
+    <div class="stat-card green"><div class="num" id="stat7day">0%</div><div class="lbl">7-Day Retention</div></div>
+    <div class="stat-card rose"><div class="num" id="stat30day">0%</div><div class="lbl">30-Day Retention</div></div>
+    <div class="stat-card"><div class="num" id="statAvgQ">0</div><div class="lbl">Avg Questions</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('students')">👤 Students</button>
+    <button class="tab" onclick="showTab('feedback')">💬 Feedback</button>
+    <button class="tab" onclick="showTab('schools')">🏫 Schools</button>
+    <button class="tab" onclick="showTab('report')">📋 Report</button>
+  </div>
+
+  <!-- ═══════════════════ PANEL: STUDENTS ════════════════════════ -->
+  <div class="panel active" id="panel-students">
+
+    <!-- Add Student Form -->
+    <div class="add-form">
+      <h3>➕ New Student Registration</h3>
+      <div class="form-row">
+        <input type="text" id="f-name" placeholder="Student Name *">
+        <select id="f-class">
+          <option value="">Select Class *</option>
+          <option>Class 6</option><option>Class 7</option><option>Class 8</option>
+          <option>Class 9</option><option>Class 10</option><option>Class 11</option>
+          <option>Class 12</option><option>College / Other</option>
+        </select>
+        <input type="text" id="f-school" placeholder="School Name *">
+        <input type="tel" id="f-phone" placeholder="Parent Phone *" maxlength="10">
+      </div>
+      <div class="form-row">
+        <input type="number" id="f-questions" placeholder="Questions Asked (0)" min="0">
+        <input type="number" id="f-sessions" placeholder="Sessions (0)" min="0">
+        <input type="text" id="f-source" placeholder="Source (Workshop/WhatsApp/School)">
+        <div></div>
+      </div>
+      <button class="add-btn" onclick="addStudent()">Add Student →</button>
+    </div>
+
+    <!-- Students Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name / School</th>
+            <th>Class</th>
+            <th>Phone</th>
+            <th>Registered</th>
+            <th>Questions</th>
+            <th>Sessions</th>
+            <th>Score</th>
+            <th>Retention (U1→U2→U3→W)</th>
+            <th>Source</th>
+            <th>Del</th>
+          </tr>
+        </thead>
+        <tbody id="studentTable">
+          <tr><td colspan="11" class="empty-state">कोई Student नहीं। ऊपर Form भरकर Add करें।</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ PANEL: FEEDBACK ════════════════════════ -->
+  <div class="panel" id="panel-feedback">
+    <div class="feedback-grid">
+
+      <!-- Parent Feedback -->
+      <div class="feedback-card">
+        <h4>👨‍👩‍👧 Parent Feedback</h4>
+        <div id="parent-feedback-list">
+          <div class="q-row">
+            <label>1. क्या यह Useful है?</label>
+            <div class="options" data-key="parent_useful">
+              <span class="opt" onclick="selectOpt(this)">हाँ, बहुत</span>
+              <span class="opt" onclick="selectOpt(this)">कुछ हद तक</span>
+              <span class="opt" onclick="selectOpt(this)">नहीं</span>
+            </div>
+          </div>
+          <div class="q-row">
+            <label>2. क्या यह Use करना Easy है?</label>
+            <div class="options" data-key="parent_easy">
+              <span class="opt" onclick="selectOpt(this)">बिल्कुल Easy</span>
+              <span class="opt" onclick="selectOpt(this)">थोड़ा मुश्किल</span>
+              <span class="opt" onclick="selectOpt(this)">बहुत मुश्किल</span>
+            </div>
+          </div>
+          <div class="q-row">
+            <label>3. क्या ₹199/month देंगे?</label>
+            <div class="options" data-key="parent_pay">
+              <span class="opt" onclick="selectOpt(this)">हाँ, ज़रूर</span>
+              <span class="opt" onclick="selectOpt(this)">सोचेंगे</span>
+              <span class="opt" onclick="selectOpt(this)">नहीं</span>
+            </div>
+          </div>
+          <div class="q-row">
+            <label>4. क्या दूसरों को Recommend करेंगे?</label>
+            <div class="options" data-key="parent_refer">
+              <span class="opt" onclick="selectOpt(this)">हाँ</span>
+              <span class="opt" onclick="selectOpt(this)">शायद</span>
+              <span class="opt" onclick="selectOpt(this)">नहीं</span>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <textarea id="parent-notes" placeholder="Additional notes / quotes from parent..." style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px;color:#f1f5f9;font-size:0.8rem;resize:vertical;min-height:70px;"></textarea>
+          </div>
+          <button class="add-btn" style="margin-top:8px;" onclick="saveFeedback('parent')">Save Parent Response</button>
+        </div>
+        <div id="parent-tally" style="margin-top:14px;"></div>
+      </div>
+
+      <!-- Student Feedback -->
+      <div class="feedback-card">
+        <h4>🎓 Student Feedback</h4>
+        <div class="q-row">
+          <label>1. Favorite Feature?</label>
+          <div class="options" data-key="student_fav">
+            <span class="opt" onclick="selectOpt(this)">🎤 Voice</span>
+            <span class="opt" onclick="selectOpt(this)">💬 Chat</span>
+            <span class="opt" onclick="selectOpt(this)">📊 Dashboard</span>
+            <span class="opt" onclick="selectOpt(this)">📚 Roadmap</span>
+          </div>
+        </div>
+        <div class="q-row">
+          <label>2. Confusing Feature?</label>
+          <div class="options" data-key="student_confuse">
+            <span class="opt" onclick="selectOpt(this)">🎤 Voice</span>
+            <span class="opt" onclick="selectOpt(this)">कुछ नहीं</span>
+            <span class="opt" onclick="selectOpt(this)">Login</span>
+            <span class="opt" onclick="selectOpt(this)">Score</span>
+          </div>
+        </div>
+        <div class="q-row">
+          <label>3. Would Use Again?</label>
+          <div class="options" data-key="student_return">
+            <span class="opt" onclick="selectOpt(this)">हाँ!</span>
+            <span class="opt" onclick="selectOpt(this)">शायद</span>
+            <span class="opt" onclick="selectOpt(this)">नहीं</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <textarea id="student-notes" placeholder="Student quotes / observations..." style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px;color:#f1f5f9;font-size:0.8rem;resize:vertical;min-height:70px;"></textarea>
+        </div>
+        <button class="add-btn" style="margin-top:8px;" onclick="saveFeedback('student')">Save Student Response</button>
+        <div id="student-tally" style="margin-top:14px;"></div>
+      </div>
+
+      <!-- School Feedback -->
+      <div class="feedback-card">
+        <h4>🏫 School Feedback</h4>
+        <input type="text" id="school-fb-name" placeholder="School Name" style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px;color:#f1f5f9;font-size:0.82rem;margin-bottom:10px;">
+        <input type="text" id="school-fb-contact" placeholder="Principal / Owner Name" style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px;color:#f1f5f9;font-size:0.82rem;margin-bottom:10px;">
+        <div class="q-row">
+          <label>1. Would Pilot (Free 14 Days)?</label>
+          <div class="options" data-key="school_pilot">
+            <span class="opt" onclick="selectOpt(this)">हाँ, तैयार</span>
+            <span class="opt" onclick="selectOpt(this)">Think करेंगे</span>
+            <span class="opt" onclick="selectOpt(this)">नहीं</span>
+          </div>
+        </div>
+        <div class="q-row">
+          <label>2. Pricing Opinion (₹50/student/month)?</label>
+          <div class="options" data-key="school_price">
+            <span class="opt" onclick="selectOpt(this)">Acceptable</span>
+            <span class="opt" onclick="selectOpt(this)">थोड़ा ज़्यादा</span>
+            <span class="opt" onclick="selectOpt(this)">बहुत ज़्यादा</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <textarea id="school-concerns" placeholder="Concerns / Objections raised..." style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px;color:#f1f5f9;font-size:0.8rem;resize:vertical;min-height:70px;"></textarea>
+        </div>
+        <button class="add-btn" style="margin-top:8px;" onclick="saveSchoolFeedback()">Save School Response</button>
+        <div id="school-tally" style="margin-top:14px;font-size:0.75rem;color:#64748b;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ PANEL: SCHOOLS ═════════════════════════ -->
+  <div class="panel" id="panel-schools">
+    <div class="add-form">
+      <h3>➕ Add School Visit</h3>
+      <div class="form-row">
+        <input type="text" id="sv-name" placeholder="School Name *">
+        <input type="text" id="sv-principal" placeholder="Principal / Contact Name">
+        <input type="tel" id="sv-phone" placeholder="Phone">
+        <select id="sv-status">
+          <option value="">Status</option>
+          <option>Cold Visit</option>
+          <option>Demo Done</option>
+          <option>Pilot Agreed</option>
+          <option>Paid Contract</option>
+          <option>Rejected</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <input type="number" id="sv-students" placeholder="Approx Students" min="0">
+        <input type="text" id="sv-notes" placeholder="Notes / Objections">
+        <div></div><div></div>
+      </div>
+      <button class="add-btn" onclick="addSchoolVisit()">Add Visit →</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>School</th><th>Contact</th><th>Phone</th><th>Students</th><th>Status</th><th>Date</th><th>Notes</th><th>Del</th></tr>
+        </thead>
+        <tbody id="schoolTable">
+          <tr><td colspan="9" class="empty-state">कोई School Visit नहीं। ऊपर Add करें।</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ PANEL: REPORT ══════════════════════════ -->
+  <div class="panel" id="panel-report">
+    <div class="feedback-card" style="max-width:700px;">
+      <h4>📋 Validation Report Generator</h4>
+      <p style="font-size:0.75rem;color:#64748b;margin-bottom:16px;">Click below to generate a WhatsApp-shareable weekly report for yourself or an investor.</p>
+      <div id="report-preview" style="background:#0f172a;border:1px solid #334155;border-radius:12px;padding:16px;font-family:monospace;font-size:0.75rem;color:#cbd5e1;white-space:pre-wrap;line-height:1.7;min-height:200px;"></div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <button class="add-btn" onclick="generateReport()">🔄 Generate Report</button>
+        <button class="export-btn" onclick="copyReport()">📋 Copy Report</button>
+        <button class="export-btn" onclick="shareReportWA()">📱 Share on WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Data Store ──────────────────────────────────────────────────────────
+  let students = JSON.parse(localStorage.getItem("bos_students") || "[]");
+  let schoolVisits = JSON.parse(localStorage.getItem("bos_schools") || "[]");
+  let feedback = JSON.parse(localStorage.getItem("bos_feedback") || "{}");
+
+  function save() {
+    localStorage.setItem("bos_students", JSON.stringify(students));
+    localStorage.setItem("bos_schools", JSON.stringify(schoolVisits));
+    localStorage.setItem("bos_feedback", JSON.stringify(feedback));
+  }
+
+  // ── Tab Control ──────────────────────────────────────────────────────────
+  function showTab(id) {
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.getElementById("panel-" + id).classList.add("active");
+    event.target.classList.add("active");
+    if (id === "report") generateReport();
+  }
+
+  // ── Add Student ──────────────────────────────────────────────────────────
+  function addStudent() {
+    const name  = document.getElementById("f-name").value.trim();
+    const klass = document.getElementById("f-class").value;
+    const school= document.getElementById("f-school").value.trim();
+    const phone = document.getElementById("f-phone").value.trim();
+    if (!name || !klass || !school || !phone) { alert("सभी * fields भरें"); return; }
+    students.push({
+      id: Date.now(),
+      name, klass, school, phone,
+      questions: parseInt(document.getElementById("f-questions").value || "0"),
+      sessions:  parseInt(document.getElementById("f-sessions").value  || "0"),
+      source:    document.getElementById("f-source").value.trim() || "Direct",
+      date: new Date().toLocaleDateString("hi-IN"),
+      retention: [false, false, false, false], // U1, U2, U3, Week
+    });
+    save();
+    ["f-name","f-school","f-phone","f-questions","f-sessions","f-source"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("f-class").value = "";
+    renderStudents();
+    updateStats();
+  }
+
+  // ── Render Students Table ─────────────────────────────────────────────
+  function renderStudents() {
+    const tbody = document.getElementById("studentTable");
+    if (students.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="11" class="empty-state">कोई Student नहीं। ऊपर Form भरकर Add करें।</td></tr>';
+      return;
+    }
+    tbody.innerHTML = students.map((s, i) => {
+      const score = calcScore(s);
+      const badge = score >= 70 ? "score-high" : score >= 40 ? "score-mid" : "score-low";
+      const dots = s.retention.map((on, di) =>
+        `<div class="dot ${on ? "active" : ""}" title="${["1st Use","2nd Use","3rd Use","Week Return"][di]}" onclick="toggleDot(${i},${di})"></div>`
+      ).join("");
+      return `<tr>
+        <td style="color:#475569;font-size:0.7rem;">${i+1}</td>
+        <td><div class="name">${s.name}</div><div class="school">${s.school}</div></td>
+        <td>${s.klass}</td>
+        <td>${s.phone}</td>
+        <td style="font-size:0.72rem;">${s.date}</td>
+        <td><input type="number" min="0" value="${s.questions}" onchange="updateField(${i},'questions',this.value)" style="width:60px;background:#0f172a;border:1px solid #334155;border-radius:6px;padding:3px 6px;color:#f1f5f9;font-size:0.8rem;"></td>
+        <td><input type="number" min="0" value="${s.sessions}" onchange="updateField(${i},'sessions',this.value)" style="width:55px;background:#0f172a;border:1px solid #334155;border-radius:6px;padding:3px 6px;color:#f1f5f9;font-size:0.8rem;"></td>
+        <td><span class="score-badge ${badge}">${score}/100</span></td>
+        <td><div class="dots">${dots}</div></td>
+        <td style="font-size:0.7rem;color:#64748b;">${s.source}</td>
+        <td><button class="delete-btn" onclick="deleteStudent(${i})">🗑</button></td>
+      </tr>`;
+    }).join("");
+  }
+
+  function calcScore(s) {
+    const q = Math.min(50, Math.round((Math.log1p(s.questions) / Math.log1p(100)) * 50));
+    const sess = Math.min(30, Math.round((Math.log1p(s.sessions) / Math.log1p(30)) * 30));
+    const ret = s.retention.filter(Boolean).length * 5;
+    return Math.min(100, q + sess + ret);
+  }
+
+  function toggleDot(si, di) {
+    students[si].retention[di] = !students[si].retention[di];
+    save(); renderStudents(); updateStats();
+  }
+
+  function updateField(si, field, val) {
+    students[si][field] = parseInt(val) || 0;
+    save(); updateStats();
+  }
+
+  function deleteStudent(i) {
+    if (!confirm("Delete this student?")) return;
+    students.splice(i, 1);
+    save(); renderStudents(); updateStats();
+  }
+
+  // ── Update Stats ──────────────────────────────────────────────────────
+  function updateStats() {
+    document.getElementById("statTotal").textContent = students.length;
+    document.getElementById("studentCount").textContent = students.length + " / 100 Students";
+    const schools = new Set(students.map(s => s.school)).size;
+    document.getElementById("statSchools").textContent = schools;
+    const r7 = students.length ? Math.round((students.filter(s => s.retention[3]).length / students.length) * 100) : 0;
+    const r30 = students.length ? Math.round((students.filter(s => s.retention.filter(Boolean).length >= 3).length / students.length) * 100) : 0;
+    document.getElementById("stat7day").textContent = r7 + "%";
+    document.getElementById("stat30day").textContent = r30 + "%";
+    const avgQ = students.length ? Math.round(students.reduce((a, s) => a + s.questions, 0) / students.length) : 0;
+    document.getElementById("statAvgQ").textContent = avgQ;
+  }
+
+  // ── School Visits ──────────────────────────────────────────────────────
+  function addSchoolVisit() {
+    const name = document.getElementById("sv-name").value.trim();
+    if (!name) { alert("School Name required"); return; }
+    schoolVisits.push({
+      name,
+      principal: document.getElementById("sv-principal").value.trim(),
+      phone: document.getElementById("sv-phone").value.trim(),
+      status: document.getElementById("sv-status").value || "Cold Visit",
+      students: parseInt(document.getElementById("sv-students").value || "0"),
+      notes: document.getElementById("sv-notes").value.trim(),
+      date: new Date().toLocaleDateString("hi-IN"),
+    });
+    save();
+    ["sv-name","sv-principal","sv-phone","sv-students","sv-notes"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("sv-status").value = "";
+    renderSchools();
+  }
+
+  function renderSchools() {
+    const tbody = document.getElementById("schoolTable");
+    if (schoolVisits.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="empty-state">कोई School Visit नहीं।</td></tr>';
+      return;
+    }
+    const statusColor = { "Cold Visit":"#64748b","Demo Done":"#60a5fa","Pilot Agreed":"#fbbf24","Paid Contract":"#34d399","Rejected":"#fb7185" };
+    tbody.innerHTML = schoolVisits.map((sv, i) => `<tr>
+      <td style="color:#475569;font-size:0.7rem;">${i+1}</td>
+      <td class="name">${sv.name}</td>
+      <td>${sv.principal}</td>
+      <td>${sv.phone}</td>
+      <td>${sv.students}</td>
+      <td><span style="color:${statusColor[sv.status]||"#94a3b8"};font-weight:800;font-size:0.75rem;">${sv.status}</span></td>
+      <td style="font-size:0.72rem;">${sv.date}</td>
+      <td style="font-size:0.72rem;color:#64748b;max-width:180px;white-space:normal;">${sv.notes}</td>
+      <td><button class="delete-btn" onclick="deleteSchool(${i})">🗑</button></td>
+    </tr>`).join("");
+  }
+
+  function deleteSchool(i) { schoolVisits.splice(i,1); save(); renderSchools(); }
+
+  // ── Feedback ──────────────────────────────────────────────────────────
+  function selectOpt(el) {
+    const group = el.parentElement;
+    group.querySelectorAll(".opt").forEach(o => o.classList.remove("sel"));
+    el.classList.add("sel");
+  }
+
+  function saveFeedback(type) {
+    const prefix = type + "_";
+    const keys = ["useful","easy","pay","refer"].concat(type === "student" ? ["fav","confuse","return"].filter(k => document.querySelector(`[data-key="${prefix}${k}"]`)) : []);
+    const data = {};
+    document.querySelectorAll(`[data-key^="${prefix}"]`).forEach(div => {
+      const k = div.dataset.key;
+      const sel = div.querySelector(".opt.sel");
+      if (!feedback[k]) feedback[k] = {};
+      if (sel) {
+        feedback[k][sel.textContent] = (feedback[k][sel.textContent] || 0) + 1;
+      }
+    });
+    const notes = document.getElementById(type + "-notes");
+    if (!feedback[type + "_notes"]) feedback[type + "_notes"] = [];
+    if (notes && notes.value.trim()) feedback[type + "_notes"].push(notes.value.trim());
+    save();
+    renderFeedbackTally(type);
+    alert("✅ Feedback saved!");
+    if (notes) notes.value = "";
+    document.querySelectorAll(`[data-key^="${prefix}"] .opt`).forEach(o => o.classList.remove("sel"));
+  }
+
+  function saveSchoolFeedback() {
+    const name = document.getElementById("school-fb-name").value.trim();
+    if (!name) { alert("School Name required"); return; }
+    const entry = { name, contact: document.getElementById("school-fb-contact").value.trim(), concerns: document.getElementById("school-concerns").value.trim(), date: new Date().toLocaleDateString("hi-IN") };
+    document.querySelectorAll('[data-key^="school_"]').forEach(div => {
+      const sel = div.querySelector(".opt.sel");
+      if (sel) entry[div.dataset.key] = sel.textContent;
+    });
+    if (!feedback.school_visits) feedback.school_visits = [];
+    feedback.school_visits.push(entry);
+    save();
+    document.getElementById("school-tally").textContent = `Saved! Total: ${feedback.school_visits.length} school responses`;
+    document.getElementById("school-fb-name").value = ""; document.getElementById("school-fb-contact").value = "";
+    document.getElementById("school-concerns").value = "";
+    document.querySelectorAll('[data-key^="school_"] .opt').forEach(o => o.classList.remove("sel"));
+  }
+
+  function renderFeedbackTally(type) {
+    const el = document.getElementById(type + "-tally");
+    let html = "";
+    const prefix = type + "_";
+    Object.entries(feedback).filter(([k]) => k.startsWith(prefix) && !k.includes("notes")).forEach(([k, vals]) => {
+      const total = Object.values(vals).reduce((a, b) => a + b, 0);
+      html += `<div style="margin-bottom:8px;"><div style="font-size:0.68rem;color:#64748b;font-weight:700;margin-bottom:3px;">${k.replace(prefix,"")}</div>`;
+      Object.entries(vals).forEach(([opt, cnt]) => {
+        const pct = Math.round((cnt/total)*100);
+        html += `<div style="font-size:0.72rem;color:#94a3b8;display:flex;align-items:center;gap:6px;margin-bottom:2px;"><span style="min-width:80px;">${opt}</span><div style="flex:1;height:4px;background:#1e293b;border-radius:2px;"><div style="height:100%;width:${pct}%;background:#00f2fe;border-radius:2px;"></div></div><span style="color:#64748b;">${pct}%</span></div>`;
+      });
+      html += "</div>";
+    });
+    el.innerHTML = html || '<div style="font-size:0.72rem;color:#475569;">No data yet.</div>';
+  }
+
+  // ── Report Generator ──────────────────────────────────────────────────
+  function generateReport() {
+    const total = students.length;
+    const r7 = total ? Math.round((students.filter(s=>s.retention[3]).length/total)*100) : 0;
+    const avgQ = total ? Math.round(students.reduce((a,s)=>a+s.questions,0)/total) : 0;
+    const schools = new Set(students.map(s=>s.school)).size;
+    const svTotal = schoolVisits.length;
+    const svPilot = schoolVisits.filter(s=>s.status==="Pilot Agreed"||s.status==="Paid Contract").length;
+    const pUseful = feedback["parent_useful"] ? Object.entries(feedback["parent_useful"]).sort((a,b)=>b[1]-a[1])[0]?.[0] : "N/A";
+
+    const report = `📊 BHARATOS ACADEMY — VALIDATION REPORT
+Date: ${new Date().toLocaleDateString("hi-IN")}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎓 STUDENTS
+Total Registered : ${total} / 100
+Schools Covered  : ${schools}
+Avg Questions    : ${avgQ} per student
+7-Day Retention  : ${r7}%
+
+🏫 SCHOOL OUTREACH
+Total Visits     : ${svTotal}
+Pilots Agreed    : ${svPilot}
+
+💬 PARENT FEEDBACK
+Most Common Resp : ${pUseful}
+
+📌 STATUS
+${total >= 50 ? "✅ 50+ students reached — B2B pitch ready" : `⏳ ${50-total} more students needed for B2B pitch`}
+${r7 >= 40 ? "✅ Retention healthy — safe to pitch schools" : `⚠️ Improve retention (${r7}%) before school pitch`}
+${svPilot >= 1 ? "✅ Pilot school engaged — MRR incoming" : "⏳ Still searching for first pilot school"}
+
+🎯 NORTH STAR: Weekly Active Students
+Target: 10 → 50 → 100
+
+BharatOS Academy · Shahdol, M.P.
+"जहाँ Teacher खुद AI है"`;
+    document.getElementById("report-preview").textContent = report;
+  }
+
+  function copyReport() {
+    navigator.clipboard.writeText(document.getElementById("report-preview").textContent);
+    alert("✅ Report copied!");
+  }
+
+  function shareReportWA() {
+    const text = document.getElementById("report-preview").textContent;
+    window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+  }
+
+  // ── Export CSV ────────────────────────────────────────────────────────
+  function exportCSV() {
+    if (!students.length) { alert("No students to export"); return; }
+    const header = "Name,Class,School,Phone,Date,Questions,Sessions,Score,U1,U2,U3,Week,Source";
+    const rows = students.map(s => {
+      const score = calcScore(s);
+      const [u1,u2,u3,w] = s.retention;
+      return `"${s.name}","${s.klass}","${s.school}","${s.phone}","${s.date}",${s.questions},${s.sessions},${score},${u1?1:0},${u2?1:0},${u3?1:0},${w?1:0},"${s.source}"`;
+    });
+    const csv = [header, ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url;
+    a.download = `bharatos_students_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  function clearAll() {
+    if (!confirm("⚠️ ALL data will be deleted. Are you sure?")) return;
+    students = []; schoolVisits = []; feedback = {};
+    save(); renderStudents(); renderSchools(); updateStats();
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────
+  renderStudents();
+  renderSchools();
+  updateStats();
+  ["parent","student"].forEach(renderFeedbackTally);
+  generateReport();
+</script>
+</body>
+</html>
